@@ -1,15 +1,18 @@
 package com.prolifixs.pixelstream.Profile.MainProfile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.prolifixs.pixelstream.Profile.MainProfile.ProfileAccountSettings.AccountSettingsActivity;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
 
@@ -29,22 +32,20 @@ import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
         setContentView(R.layout.activity_main_profile);
         Log.d(TAG, "onCreate: Starting activity");
 
-        //setupBottomNavigationView();
+        setupBottomNavigationView();
+        setupToolbar();
     }
 
     private void setupToolbar(){
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(new android.support.v7.widget.Toolbar.OnMenuItemClickListener() {
+        ImageView profileMenu = (ImageView) findViewById(R.id.profileMenu);
+        profileMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.d(TAG, "onMenuItemClick: clicked on menu item" + item);
-
-                switch (item.getItemId()){
-                    case R.id.profileMenu:
-                        Log.d(TAG, "onMenuItemClick: Navigating to profile settings");
-                }
-                return false;
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Navigating to Account settings");
+                Intent intent = new Intent(mContext, AccountSettingsActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -62,9 +63,4 @@ import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
         menuItem.setChecked(true);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu, menu);
-        return true;
-    }
 }

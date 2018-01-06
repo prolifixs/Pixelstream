@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.prolifixs.pixelstream">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +24,12 @@
         <activity android:name=".Profile.MainProfile.ProfileActivity"></activity>
         <activity android:name=".Search.MainSearch.SearchActivity"></activity>
         <activity android:name=".Upload.MainUpload.UploadActivity"></activity>
+        <activity android:name=".Profile.MainProfile.ProfileAccountSettings.AccountSettingsActivity"></activity>
+        <activity android:name=".User.Login.LoginMainActivity"></activity>
+        <activity android:name=".User.Register.RegisterMainActivity"></activity>
+        <activity android:name=".User.Login.LostPassword.LostPassword"></activity>
+        <activity android:name=".User.Login.Fragment.PasswordChangedSuccess"></activity>
+
     </application>
 
 </manifest>

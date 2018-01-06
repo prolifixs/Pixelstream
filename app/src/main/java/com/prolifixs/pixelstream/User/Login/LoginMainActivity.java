@@ -1,0 +1,261 @@
+package com.prolifixs.pixelstream.User.Login;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.prolifixs.pixelstream.Home.MainHome.MainHomeActivity;
+import com.prolifixs.pixelstream.R;
+import com.prolifixs.pixelstream.User.Login.LostPassword.LostPassword;
+import com.prolifixs.pixelstream.User.Register.RegisterMainActivity;
+
+/**
+ * Created by Prolifixs on 1/4/2018.
+ */
+
+public class LoginMainActivity extends AppCompatActivity {
+    private static final String TAG = "LoginMainActivity";
+
+    //Firebase setup
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    //setup widgets
+    private Context mContext;
+    private ProgressBar mProgressBar;
+    private EditText mEmail, mPassword;
+    private TextView mPleaseWait, mForgotPassword;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_user_login);
+
+
+        Log.d(TAG, "onCreate: Starting activity");
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mPleaseWait = (TextView) findViewById(R.id.pleaseWait);
+        mEmail = (EditText) findViewById(R.id.inputEmail);
+        mPassword = (EditText) findViewById(R.id.inputPassword);
+        mForgotPassword = (TextView) findViewById(R.id.forgotPassword);
+        mContext = LoginMainActivity.this;
+
+        mPleaseWait.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+
+        setupFirebaseAuth();
+
+        init();
+
+    }
+    
+
+
+
+
+
+    //Simple method for checking empty strings -- method is used in 'init'
+    private boolean isStringNull(String string){
+        Log.d(TAG, "isStringNull: Checking string if null.");
+        if (string.equals("")){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
+
+
+    //-----------------------------------------------F I R E   B A S E--------------------------------------------------
+
+
+    /*
+    * Method for handling the login
+    * */
+
+    private void init(){
+        //Initializing the button for logging in.
+        Button btnLogin = (Button) findViewById(R.id.btn_login);
+        Button btnRegister = (Button) findViewById(R.id.btn_register);
+
+
+        //For the login-----------------------------------------------------------
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Attempting to login");
+
+                //Hide soft keyboard-----------------------------------
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (null != LoginMainActivity.this.getCurrentFocus())
+                    imm.hideSoftInputFromWindow(LoginMainActivity.this.getCurrentFocus()
+                            .getApplicationWindowToken(), 0);
+
+
+
+
+                String email = mEmail.getText().toString();
+                String password = mPassword.getText().toString();
+
+                if (isStringNull(email) && isStringNull(password)){
+                    Toast.makeText(mContext, "you must fill out all fields", Toast.LENGTH_SHORT).show();
+                }else if (!isStringNull(email) && isStringNull(password)){
+                    Toast.makeText(mContext, "Password filled cannot be empty", Toast.LENGTH_SHORT).show();
+                }else if (isStringNull(email) && !isStringNull(password)){
+                    Toast.makeText(mContext, "Email field is empty", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mPleaseWait.setVisibility(View.VISIBLE);
+
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(LoginMainActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+
+                                        // Sign in success, update UI with the signed-in user's information
+                                        mProgressBar.setVisibility(View.GONE);
+                                        mPleaseWait.setVisibility(View.GONE);
+                                        Log.d(TAG, "signInWithEmail:success");
+                                        Toast.makeText(mContext, "Authentication success", Toast.LENGTH_SHORT).show();
+                                        FirebaseUser user = mAuth.getCurrentUser();
+
+                                        //Navigating to home activity
+
+                                        Intent intent = new Intent(mContext, MainHomeActivity.class);
+                                        startActivity(intent);
+                                        //updateUI(user);
+                                    } else {
+
+                                        // If sign in fails, display a message to the user.
+                                        mProgressBar.setVisibility(View.GONE);
+                                        mPleaseWait.setVisibility(View.GONE);
+                                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(LoginMainActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                        //updateUI(null);
+                                    }
+
+                                    // ...
+                                }
+                            });
+                }
+            }
+        });
+
+
+        //REGISTER NEW USER BUTTON-----------------------------------------------
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: navigating to register activity");
+
+                Intent intent = new Intent(mContext, RegisterMainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //---FORGOT PASSWORD?--------------------------------------------------------
+        mForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Retrieving lost password");
+
+                if (mAuth.getCurrentUser() == null) {
+
+                    Intent intent = new Intent(mContext, LostPassword.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+
+
+        //if log_in is successful, navigating to homeActivity-------------------------------------
+        if (mAuth.getCurrentUser() != null){
+            Intent intent = new Intent(mContext, MainHomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        
+
+        
+    }
+    //Hide keyboard------------------------------------------------------------------------------
+    public void dismissKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != LoginMainActivity.this.getCurrentFocus())
+            imm.hideSoftInputFromWindow(LoginMainActivity.this.getCurrentFocus()
+                    .getApplicationWindowToken(), 0);
+    }
+    
+    
+    
+    
+    
+    
+     /*
+    * IMPORTANT : DO NOT TOUCH.
+    * Setting up firebase Auth for the first time. this is the beginning of authentication.
+    * */
+
+    private void setupFirebaseAuth(){
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase Auth");
+        mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+                if (user != null){
+                    //User is Signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in" + user.getUid());
+                }else {
+                    //User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null){
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+
+
+}

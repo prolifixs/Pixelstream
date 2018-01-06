@@ -1,4 +1,4 @@
-package com.prolifixs.pixelstream.Home.MainHome.Fragments;
+package com.prolifixs.pixelstream.Utils;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +17,10 @@ import java.util.List;
 * */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "SectionsPagerAdapter";
+
+    /*
+    * IMPORTANT : DO NOT TOUCH THIS.....
+    * */
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
 

@@ -1,20 +1,24 @@
 package com.prolifixs.pixelstream.Home.MainHome;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TableLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.prolifixs.pixelstream.Home.MainHome.Fragments.CameraFragment;
 import com.prolifixs.pixelstream.Home.MainHome.Fragments.HomeFragment;
 import com.prolifixs.pixelstream.Home.MainHome.Fragments.MessagesFragment;
-import com.prolifixs.pixelstream.Home.MainHome.Fragments.SectionsPagerAdapter;
+import com.prolifixs.pixelstream.User.Login.LoginMainActivity;
+import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
 
@@ -27,6 +31,10 @@ public class MainHomeActivity extends AppCompatActivity {
     private static final int ACTIVITY_NUM = 0;
 
     private Context mContext = MainHomeActivity.this;
+
+    //Firebase setup
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +42,16 @@ public class MainHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_home);
         Log.d(TAG, "onCreate: Starting Main home activity");
 
+        setupFirebaseAuth();
         setupBottomNavigationView();
         setupViewPager();
     }
 
 
+
     /*
-    * Responsible for adding the 3 tabs: camera, home and messaging.
-    * */
+            * Responsible for adding the 3 tabs: camera, home and messaging.
+            * */
     private void setupViewPager(){
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CameraFragment());       //index0
@@ -69,5 +79,64 @@ public class MainHomeActivity extends AppCompatActivity {
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
+    }
+
+
+
+
+
+
+
+        //-----------------------------------------------F I R E   B A S E--------------------------------------------------
+
+
+        //Checking if user is signed in, else navigate to login screen () - first and only setup is done here.
+    private void checkCurrentUser(FirebaseUser user){
+        Log.d(TAG, "checkCurrentUser: checking if user is logged in");
+        if (user == null){
+            Intent intent = new Intent(mContext, LoginMainActivity.class);
+            startActivity(intent);//method is called in 'setupFirebaseAuth'
+        }
+    }
+     /*
+    * IMPORTANT : DO NOT TOUCH.
+    * Setting up firebase Auth for the first time. this is the beginning of authentication.
+    * */
+
+    private void setupFirebaseAuth(){
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase Auth");
+        mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                //Checking the user if logged in
+                checkCurrentUser(user);
+
+                if (user != null){
+                    //User is Signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in" + user.getUid());
+                }else {
+                    //User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthStateListener);
+        checkCurrentUser(mAuth.getCurrentUser());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null){
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
     }
 }

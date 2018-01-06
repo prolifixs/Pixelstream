@@ -28,7 +28,7 @@ import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
         setContentView(R.layout.activity_main_search);
         Log.d(TAG, "onCreate: Starting activity");
 
-        //setupBottomNavigationView();
+        setupBottomNavigationView();
     }
 
     /*

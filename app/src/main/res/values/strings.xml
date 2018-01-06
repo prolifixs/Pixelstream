@@ -3,4 +3,13 @@
 
     <!-- Navigation -->
     <string name="home_navigation">home_navigation</string>
+
+    <!-- Account Settings -->
+    <string name="edit_profile_fragment">Edit Profile</string>
+    <string name="sign_out_fragment">Sign Out</string>
+
+    <!-- Forgot password -->
+
+
+
 </resources>
