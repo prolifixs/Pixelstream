@@ -4,11 +4,14 @@
     <!-- Navigation -->
     <string name="home_navigation">home_navigation</string>
 
-    <!-- Account Settings -->
+    <!-- Fragment names - Account Settings -->
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="sign_out_fragment">Sign Out</string>
 
-    <!-- Forgot password -->
+    <!-- Firebase database fields  -->
+    <string name="dbname_users">users</string>
+    <string name="dbname_user_account_settings">user_account_settings</string>
+
 
 
 

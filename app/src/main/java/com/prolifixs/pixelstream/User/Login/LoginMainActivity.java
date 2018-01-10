@@ -133,12 +133,33 @@ public class LoginMainActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
 
-                                        // Sign in success, update UI with the signed-in user's information
-                                        mProgressBar.setVisibility(View.GONE);
-                                        mPleaseWait.setVisibility(View.GONE);
-                                        Log.d(TAG, "signInWithEmail:success");
-                                        Toast.makeText(mContext, "Authentication success", Toast.LENGTH_SHORT).show();
+                                        //checking if user is verified so it can login.
                                         FirebaseUser user = mAuth.getCurrentUser();
+
+                                        try {
+                                            if (user.isEmailVerified()){
+                                                Log.d(TAG, "onComplete: successful. navigating to home activity");
+                                                Intent intent = new Intent(mContext, MainHomeActivity.class);
+                                                startActivity(intent);
+
+                                            }else{
+                                                //keyboard
+                                                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                if (null != LoginMainActivity.this.getCurrentFocus())
+                                                    imm.hideSoftInputFromWindow(LoginMainActivity.this.getCurrentFocus()
+                                                            .getApplicationWindowToken(), 0);
+
+                                                //Error message
+                                                Toast.makeText(mContext, "Check your inbox for verification email", Toast.LENGTH_SHORT).show();
+                                                mProgressBar.setVisibility(View.GONE);
+                                                mPleaseWait.setVisibility(View.GONE);
+                                                mAuth.signOut();
+                                            }
+
+                                        }catch (NullPointerException e){
+                                            Log.e(TAG, "onComplete: NullPointerException" + e.getMessage() );
+
+                                        }
 
                                         //Navigating to home activity
 
@@ -151,7 +172,7 @@ public class LoginMainActivity extends AppCompatActivity {
                                         mProgressBar.setVisibility(View.GONE);
                                         mPleaseWait.setVisibility(View.GONE);
                                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                        Toast.makeText(LoginMainActivity.this, "Authentication failed.",
+                                        Toast.makeText(LoginMainActivity.this, "Incorrect email or password",
                                                 Toast.LENGTH_SHORT).show();
                                         //updateUI(null);
                                     }

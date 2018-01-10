@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -15,6 +16,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
 
@@ -29,6 +35,11 @@ public class RegisterMainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseMethods firebaseMethods;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+
+
+    private String append = "";
 
     //setup widgets
     private Context mContext;
@@ -57,9 +68,9 @@ public class RegisterMainActivity extends AppCompatActivity {
 
     //Checking inputs and making sure all fields are filled before registration can be successful.--------
     private boolean checkInputs(String email, String username, String password){
-        Log.d(TAG, "checkInputs: checking inputs for null vakues");
+        Log.d(TAG, "checkInputs: checking inputs for null vakues");//////////////////ASSIGN MORE LOGIC HERE ELSE APP CRASHES
         if (email.equals("") || username.equals("") || password.equals("")){
-            Toast.makeText(mContext, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Please fill out all fields", Toast.LENGTH_SHORT).show();
                 return false;
         }
         return true;
@@ -71,6 +82,16 @@ public class RegisterMainActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClick: Creating a new user");
+
+
+                //Hide soft keyboard-----------------------------------
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (null != RegisterMainActivity.this.getCurrentFocus())
+                    imm.hideSoftInputFromWindow(RegisterMainActivity.this.getCurrentFocus()
+                            .getApplicationWindowToken(), 0);
+
+
                 email = mEmail.getText().toString();
                 username = mUsername.getText().toString();
                 password = mPassword.getText().toString();
@@ -87,7 +108,21 @@ public class RegisterMainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        /*
+    * To go back to login screen.
+    * */
+        mBackToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: navigating back to login screen.");
+                finish();
+            }
+        });
     }
+
+
+
     /*
     * Initializing Activity widgets
     * */
@@ -127,14 +162,46 @@ public class RegisterMainActivity extends AppCompatActivity {
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase Auth");
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null){
+                if (user != null){//------------------------------replace firebase to firestore here-----------------------------------------
                     //User is Signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in" + user.getUid());
+
+                    //checking current state of database if anything is changed--------
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {////on success
+
+                            //1st check : making sure the username is not currently in use------FirebaseMethods.java
+                            if (firebaseMethods.checkIfUsernameExists(username, dataSnapshot)){
+                                //if username exists, append a random string
+                                append = myRef.push().getKey().substring(3,10);
+                                Log.d(TAG, "onDataChange: username already exists. Appending random string to name"
+                                + append);
+                            }
+                            //Appened username now is
+                            username = username + append;
+
+                            //add new user to the database---------------------------------------************FIREBASE_TO_FIRESTORE
+                            //find the Main Code in 'firebasemethods.java'
+                            firebaseMethods.addNewUser(email, username, "", "", "");
+
+                            Toast.makeText(mContext, "Signup successful, sending verification email", Toast.LENGTH_SHORT).show();
+                            mAuth.signOut();//until user verify email.
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {///on error
+
+                        }
+                    });
+                    finish();
                 }else {
                     //User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
