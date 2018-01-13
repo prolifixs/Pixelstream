@@ -6,6 +6,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,10 +15,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.User.Utils.StringManipulation;
 import com.prolifixs.pixelstream.User.model.User;
 import com.prolifixs.pixelstream.User.model.UserAccountSettings;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Prolifixs on 1/5/2018.
@@ -33,11 +43,18 @@ public class FirebaseMethods {
     private FirebaseDatabase mFirebaseDatabse;
     private DatabaseReference myRef;
 
+    //FireStore
+    private FirebaseFirestore mFirestore;
+
+
     public FirebaseMethods(Context context){
         mContext = context;
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabse = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabse.getReference();
+
+        //FireStore
+        mFirestore = FirebaseFirestore.getInstance();
 
         if (mAuth.getCurrentUser() != null){
             userID = mAuth.getCurrentUser().getUid();
@@ -65,7 +82,9 @@ public class FirebaseMethods {
                 return true;
             }
         }return false;
+
     }
+
 
     //Registering new email and password to fireBase Authentication.------------------------------------------
     public void registerNewEmail(String email, String password, final String username){
@@ -131,9 +150,9 @@ public class FirebaseMethods {
             //create a user
         User user = new User( userID, 1, email, StringManipulation.condenseUsername(username));
 
-        //------------------------------replace firebase to firestore here-----------------------------------------
+        //------------------------------Realtime Firebase (mitch.tabian youtube)-----------------------------------------
         //insert data into users in database
-        myRef.child(mContext.getString(R.string.dbname_users))
+        /*myRef.child(mContext.getString(R.string.dbname_users))
                 .child(userID)
                 .setValue(user);
 
@@ -151,8 +170,64 @@ public class FirebaseMethods {
 
         myRef.child(mContext.getString(R.string.dbname_user_account_settings))
                 .child(userID)
-                .setValue(settings);
+                .setValue(settings);*/
+
+
+        //------------------------------------  fireStore version *****-----------------------------------------------------------
+
+        //user-------------------------------------------
+
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("user_id", userID);
+        userMap.put("phone_number", "1");
+        userMap.put("email", email);
+        userMap.put("username", username);
+
+        mFirestore.collection("users").document(userID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "onSuccess: successfully added file to firestore");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String error = e.getMessage();
+                Log.d(TAG, "onFailure: error adding file to firestore");
+            }
+        });
+
+        //User_account_settings------------------------------
+
+        Map<String, String> userSettings = new HashMap<>();
+        userSettings.put("description", description);
+        userSettings.put("display_name", username);
+        userSettings.put("followers", "0");
+        userSettings.put("following", "0");
+        userSettings.put("posts", "0");
+        userSettings.put("profile_photo", profile_photo);
+        userSettings.put("username", username);
+        userSettings.put("website", website);
+
+        mFirestore.collection("user_account_settings").document(userID).set(userSettings).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "onSuccess: successfully added to firestore");
+                
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String error = e.getMessage();
+                Log.d(TAG, "onFailure: Error adding file to firestore");
+            }
+        });
+
+
     }
+
+
+
+
 
 
 

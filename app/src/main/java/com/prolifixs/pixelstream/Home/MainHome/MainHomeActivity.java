@@ -14,9 +14,9 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.prolifixs.pixelstream.Home.MainHome.Fragments.CameraFragment;
-import com.prolifixs.pixelstream.Home.MainHome.Fragments.HomeFragment;
-import com.prolifixs.pixelstream.Home.MainHome.Fragments.MessagesFragment;
+import com.prolifixs.pixelstream.Home.MainHome.Camera.CameraFragment;
+import com.prolifixs.pixelstream.Home.MainHome.HomeFragment.HomeFragment;
+import com.prolifixs.pixelstream.Home.MainHome.Message.Models.Fragments.MainMessagesFragment;
 import com.prolifixs.pixelstream.User.Login.LoginMainActivity;
 import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
 import com.prolifixs.pixelstream.R;
@@ -56,7 +56,7 @@ public class MainHomeActivity extends AppCompatActivity {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CameraFragment());       //index0
         adapter.addFragment(new HomeFragment());         //index 1
-        adapter.addFragment(new MessagesFragment());     //index 2
+        adapter.addFragment(new MainMessagesFragment());     //index 2
         ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(adapter);
 
