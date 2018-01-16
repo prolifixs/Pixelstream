@@ -15,17 +15,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.User.Utils.StringManipulation;
 import com.prolifixs.pixelstream.User.model.User;
 import com.prolifixs.pixelstream.User.model.UserAccountSettings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,7 +69,7 @@ public class FirebaseMethods {
     /*
     * -------------------Checking if username exists-------------------------------------------------
     * */
-    public boolean checkIfUsernameExists(String username, DataSnapshot dataSnapshot){
+/*    public boolean checkIfUsernameExists(){
         Log.d(TAG, "checkIfUsernameExists: checking if: " + username + "already exists");
 
         User user = new User();///User is created in User/model/user.java class.
@@ -83,7 +88,74 @@ public class FirebaseMethods {
             }
         }return false;
 
-    }
+    }*/
+
+
+    /*
+    * checking if username already exists (firestore version)******-----------------------------------------------
+    *
+    * */
+        /*private void checkIfUsernameExists(final String username) {
+            Log.d(TAG, "checkingSameUser: checking if the username already exists");
+            final CollectionReference docRef = mFirestore.collection("users");
+
+            docRef.whereEqualTo("user_id", userID).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if (e != null){
+                        Log.w(TAG, "onEvent: ", e);
+                        return;
+                    }
+                    List<String> usernames = new ArrayList<>();
+                    for (DocumentSnapshot doc : documentSnapshots){
+                        if (doc.get("username").equals(username)){
+                            //..
+                        }
+                    }
+
+                }
+            });
+
+        }*/
+
+
+
+    /*
+    * ------------------Checking if username exists (Firestore version)-----------------------------------
+    * */
+    /*public void checkingIfusernameExists(final String username){
+        Log.d(TAG, "checkingIfusernameExists: checking if" + username + "exists");
+
+        FirebaseFirestore reference = FirebaseFirestore.getInstance();
+        Query query = (Query) reference.collection("users").document(userID).get().getResult().get("username");
+
+        if (query.equals(username)){
+            query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if (!documentSnapshots.equals(username)){
+                        //when username exists
+                        for (DocumentSnapshot singleSnpashot: documentSnapshots.getDocuments()){
+                            if (singleSnpashot.exists()){
+                                //
+                            }
+                        }
+                    }
+                }
+            });
+
+        }else if (!query.equals(username)){
+            query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    //when username does not exists
+
+                }
+            });
+        }
+
+    }*/
 
 
     //Registering new email and password to fireBase Authentication.------------------------------------------
@@ -147,7 +219,7 @@ public class FirebaseMethods {
     *
     * */
     public void addNewUser(String email, String username, String description, String website, String profile_photo){
-            //create a user
+        //create a user
         User user = new User( userID, 1, email, StringManipulation.condenseUsername(username));
 
         //------------------------------Realtime Firebase (mitch.tabian youtube)-----------------------------------------
@@ -155,7 +227,6 @@ public class FirebaseMethods {
         /*myRef.child(mContext.getString(R.string.dbname_users))
                 .child(userID)
                 .setValue(user);
-
         //insert data into user_account_settings in database
         UserAccountSettings settings = new UserAccountSettings(
                 description,
@@ -167,13 +238,13 @@ public class FirebaseMethods {
                 username,
                 website
         );
-
         myRef.child(mContext.getString(R.string.dbname_user_account_settings))
                 .child(userID)
                 .setValue(settings);*/
 
 
         //------------------------------------  fireStore version *****-----------------------------------------------------------
+
 
         //user-------------------------------------------
 
@@ -212,7 +283,7 @@ public class FirebaseMethods {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "onSuccess: successfully added to firestore");
-                
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,8 +23,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Prolifixs on 1/4/2018.
@@ -37,6 +49,9 @@ public class RegisterMainActivity extends AppCompatActivity {
     private FirebaseMethods firebaseMethods;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
+
+    //FireStore
+    private FirebaseFirestore mFirestore;
 
 
     private String append = "";
@@ -164,6 +179,7 @@ public class RegisterMainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
+        mFirestore = FirebaseFirestore.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -177,23 +193,8 @@ public class RegisterMainActivity extends AppCompatActivity {
                     myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {////on success
+                            checkIfUsernameExists(username);
 
-                            //1st check : making sure the username is not currently in use------FirebaseMethods.java
-                            if (firebaseMethods.checkIfUsernameExists(username, dataSnapshot)){
-                                //if username exists, append a random string
-                                append = myRef.push().getKey().substring(3,10);
-                                Log.d(TAG, "onDataChange: username already exists. Appending random string to name"
-                                + append);
-                            }
-                            //Appened username now is
-                            username = username + append;
-
-                            //add new user to the database---------------------------------------************FIREBASE_TO_FIRESTORE
-                            //find the Main Code in 'firebasemethods.java'
-                            firebaseMethods.addNewUser(email, username, "", "", "");
-
-                            Toast.makeText(mContext, "Signup successful, sending verification email", Toast.LENGTH_SHORT).show();
-                            mAuth.signOut();//until user verify email.
                         }
 
                         @Override
@@ -208,6 +209,57 @@ public class RegisterMainActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+
+    /*
+* checking if username already exists (firestore version)******-----------------------------------------------
+*
+* */
+    private void checkIfUsernameExists(final String username) {
+        Log.d(TAG, "checkIfUsernameExists: checking if the " + username + "Exists");
+
+        String userID = mAuth.getCurrentUser().getUid();
+        //FireStore
+        mFirestore = FirebaseFirestore.getInstance();
+
+
+        final CollectionReference docRef = mFirestore.collection("users");
+
+        docRef.whereEqualTo("username", username).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                if (e != null){
+                    Log.w(TAG, "onEvent: ", e);
+                    return;
+                }
+
+                for (DocumentSnapshot doc : documentSnapshots){
+                    if (doc.get("username").equals(username)){
+                        //when username exists
+                        Log.d(TAG, "FOUND A MATCH: Appending digits to username");
+
+                        //if username exists, append a random string
+                        append = myRef.push().getKey().substring(3, 10);
+                        Log.d(TAG, "onDataChange: username already exists. Appending random string to name"
+                                + append);
+                    }
+                }
+                //Appened username now is
+                String mUsername = "";
+                mUsername = username + append;
+
+                //add new user to the database---------------------------------------************FIREBASE_TO_FIRESTORE
+                //find the Main Code in 'firebasemethods.java'
+                firebaseMethods.addNewUser(email, mUsername, "", "", "");
+
+                Toast.makeText(mContext, "Signup successful, sending verification email", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();//until user verify email.
+
+            }
+        });
+
     }
 
     @Override
