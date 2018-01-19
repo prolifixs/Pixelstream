@@ -185,7 +185,7 @@ public class RegisterMainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null){//------------------------------replace firebase to firestore here-----------------------------------------
+                if (user != null){//------------------------------replace firebase to firestore here ****(UPDATE : DONE!)-----------------------------------------
                     //User is Signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in" + user.getUid());
 

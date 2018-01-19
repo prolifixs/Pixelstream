@@ -56,5 +56,8 @@ dependencies {
 
     //BottomNavigationViewEx Library
     compile 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+
+    //Circle imageview library
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 }
 apply plugin: 'com.google.gms.google-services'

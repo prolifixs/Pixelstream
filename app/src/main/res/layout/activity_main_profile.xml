@@ -4,13 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+
+  <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/snippet_top_profilebar"/>
 
-        <include layout="@layout/layout_bottom_tabs"/>
+      <!--*******************Top toolbar*************************-->
+      <include layout="@layout/snippet_top_profilebar"/>
+
+
+      <!--*******************User information*************************-->
+      <include layout="@layout/layout_center_profile"/>
+
+
+      <!--*******************today latest post view for user/unfollowing*************************-->
+      <include layout="@layout/snippet_profile_grid_todaypost"/>
+
+
+
+      <!--*******************Bottom Navigation bar*************************-->
+      <include layout="@layout/layout_bottom_tabs"/>
+
+      <!--*******************Global progressbar*************************-->
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/profileProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

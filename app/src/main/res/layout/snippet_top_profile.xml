@@ -1,0 +1,150 @@
+<merge
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+
+
+    <!--    Username field  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:id="@+id/linlayout1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JOHN DOE"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+
+    <!--    view profile button  -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/linlayout1"
+        android:orientation="vertical"
+        android:id="@+id/linLayout2">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_round_edge"
+            android:text="view profile"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linLayout3"
+        android:layout_below="@+id/linLayout2"
+
+        android:weightSum="3">
+
+                                        <!--    posts field  -->
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout1"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="posts"
+                android:paddingLeft="10dp"
+                android:layout_alignParentStart="true"
+                android:id="@+id/tvPosts"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="137"
+                android:paddingLeft="10dp"
+                android:textStyle="bold"
+                android:layout_below="@+id/tvPosts"
+                android:layout_alignParentStart="true"
+                android:textSize="21sp"
+                android:textColor="@color/black"/>
+
+        </RelativeLayout>
+
+                                        <!--    watchers field  -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout2"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="watchers"
+                android:id="@+id/tvWatchers"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1068"
+                android:textStyle="bold"
+                android:layout_below="@+id/tvWatchers"
+                android:layout_centerHorizontal="true"
+                android:textSize="21sp"
+                android:textColor="@color/black"/>
+
+        </RelativeLayout>
+
+                                        <!--    watching field  -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout3"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tvWatching"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:paddingRight="10dp"
+                android:layout_alignParentTop="true"
+                android:text="watching"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/tvWatching"
+                android:textStyle="bold"
+                android:text="237"
+                android:textColor="@color/black"
+                android:textSize="21sp" />
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+</merge>
