@@ -28,14 +28,28 @@
                     android:layout_centerHorizontal="true"
                     app:civ_border_width="2dp"/>
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentBottom="true"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignEnd="@id/profile_photo"
-                    android:src="@drawable/ic_camera_white"
-                    android:id="@+id/changePhoto"
-                    android:background="#A8A8A8"/>
+                    android:layout_alignParentBottom="true">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/circle_shape"
+                        android:id="@+id/changePhoto"/>
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/ic_camera_white"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/changePhotoIcon"/>
+
+                </RelativeLayout>
+
+
 
             </RelativeLayout>
 
@@ -48,7 +62,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/profile_photoLayout"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/round_edge_editprofile"
+                android:background="@drawable/input_background_editprofile"
                 android:id="@+id/relLayout1">
 
                 <TextView
@@ -74,9 +88,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/usernameBorder"
-                    android:layout_alignParentBottom="true"
                     android:id="@+id/username"
                     android:layout_centerVertical="true"
+                    android:background="@color/blackTransparent"
+                    android:maxLength="60"
+                    android:ems="10"
                     android:hint="username"
                     android:inputType="textNoSuggestions"/>
 
@@ -88,7 +104,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/relLayout1"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/round_edge_editprofile"
+                android:background="@drawable/input_background_editprofile"
                 android:id="@+id/relLayout2">
 
                 <TextView
@@ -115,9 +131,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/nameBorder"
-                    android:layout_alignParentBottom="true"
                     android:id="@+id/full_name"
                     android:layout_centerVertical="true"
+                    android:background="@color/blackTransparent"
+                    android:maxLength="60"
                     android:hint="full name"
                     android:inputType="textNoSuggestions"/>
 
@@ -129,7 +146,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/relLayout2"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/round_edge_editprofile"
+                android:background="@drawable/input_background_editprofile"
                 android:id="@+id/relLayout3">
 
                 <TextView
@@ -156,22 +173,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/websiteBorder"
-                    android:layout_alignParentBottom="true"
                     android:id="@+id/website"
                     android:layout_centerVertical="true"
+                    android:background="@color/blackTransparent"
+                    android:maxLength="200"
                     android:hint="website"
                     android:inputType="textNoSuggestions"/>
 
             </RelativeLayout>
 
 
-            <!--************Website Section************-->
+            <!--************Biography Section************-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_below="@id/relLayout3"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/round_edge_editprofile"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/input_background_editprofile"
                 android:id="@+id/relLayout4">
 
                 <TextView
@@ -198,11 +216,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/AboutBorder"
-                    android:layout_alignParentBottom="true"
+                    android:paddingTop="12.5dp"
+                    android:paddingBottom="12.5dp"
                     android:id="@+id/description"
                     android:layout_centerVertical="true"
+                    android:background="@color/blackTransparent"
+                    android:maxLength="200"
                     android:hint="about your page"
-                    android:inputType="textNoSuggestions"/>
+                    android:inputType="textMultiLine"/>
 
             </RelativeLayout>
 
@@ -227,7 +248,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@id/relLayout5"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/round_edge_editprofile"
+                android:background="@drawable/input_background_editprofile"
                 android:id="@+id/relLayout6">
 
                 <TextView
@@ -253,21 +274,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/emailBorder"
-                    android:layout_alignParentBottom="true"
+                    android:background="@color/blackTransparent"
                     android:id="@+id/email"
                     android:layout_centerVertical="true"
+                    android:maxLength="60"
                     android:hint="email"
-                    android:inputType="textNoSuggestions"/>
+                    android:inputType="textEmailAddress"/>
 
             </RelativeLayout>
 
-            <!--************Email Section************-->
+            <!--************Phone number Section************-->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@id/relLayout6"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/round_edge_editprofile"
+                android:background="@drawable/input_background_editprofile"
                 android:id="@+id/relLayout7">
 
                 <TextView
@@ -293,11 +315,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/phoneNumberBorder"
-                    android:layout_alignParentBottom="true"
+                    android:background="@color/blackTransparent"
                     android:id="@+id/phone_number"
                     android:layout_centerVertical="true"
+                    android:maxLength="15"
                     android:hint="phone number"
-                    android:inputType="textNoSuggestions"/>
+                    android:inputType="phone"/>
 
             </RelativeLayout>
 

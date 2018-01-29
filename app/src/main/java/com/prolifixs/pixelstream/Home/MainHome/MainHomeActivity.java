@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.prolifixs.pixelstream.Home.MainHome.Camera.CameraFragment;
 import com.prolifixs.pixelstream.Home.MainHome.HomeFragment.HomeFragment;
 import com.prolifixs.pixelstream.Home.MainHome.Message.Models.Fragments.MainMessagesFragment;
@@ -21,6 +22,7 @@ import com.prolifixs.pixelstream.User.Login.LoginMainActivity;
 import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
+import com.prolifixs.pixelstream.Utils.UniversalImageLoader;
 
 /**
  * Created by Prolifixs on 1/1/2018.
@@ -45,6 +47,12 @@ public class MainHomeActivity extends AppCompatActivity {
         setupFirebaseAuth();
         setupBottomNavigationView();
         setupViewPager();
+        initImageLoader();
+    }
+
+    private void initImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
 

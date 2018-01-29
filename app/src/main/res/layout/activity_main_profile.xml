@@ -10,29 +10,14 @@
         android:layout_height="match_parent">
 
 
-      <!--*******************Top toolbar*************************-->
-      <include layout="@layout/snippet_top_profilebar"/>
+      <!--***turned into a container that swaps fragments in and out*****-->
+      <!--****main profile layout code is transferred to fragment_main_profile****-->
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:id="@+id/container">
 
-
-      <!--*******************User information*************************-->
-      <include layout="@layout/layout_center_profile"/>
-
-
-      <!--*******************today latest post view for user/unfollowing*************************-->
-      <include layout="@layout/snippet_profile_grid_todaypost"/>
-
-
-
-      <!--*******************Bottom Navigation bar*************************-->
-      <include layout="@layout/layout_bottom_tabs"/>
-
-      <!--*******************Global progressbar*************************-->
-        <ProgressBar
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/profileProgressBar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="200dp"/>
+      </FrameLayout>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

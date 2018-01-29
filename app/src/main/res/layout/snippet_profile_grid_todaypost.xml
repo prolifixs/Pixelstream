@@ -41,7 +41,7 @@
         <GridView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/gridView"
+            android:id="@+id/gridViewTodayPost"
             android:layout_below="@+id/todayPostText"
             android:numColumns="3"
             android:verticalSpacing="1dp"

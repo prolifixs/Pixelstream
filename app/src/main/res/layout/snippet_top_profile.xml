@@ -23,7 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="JOHN DOE"
-            android:textSize="20sp"/>
+            android:id="@+id/display_name"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
@@ -78,6 +79,7 @@
                 android:paddingLeft="10dp"
                 android:textStyle="bold"
                 android:layout_below="@+id/tvPosts"
+                android:id="@+id/textPost"
                 android:layout_alignParentStart="true"
                 android:textSize="21sp"
                 android:textColor="@color/black"/>
@@ -105,6 +107,7 @@
                 android:text="1068"
                 android:textStyle="bold"
                 android:layout_below="@+id/tvWatchers"
+                android:id="@+id/textFollowers"
                 android:layout_centerHorizontal="true"
                 android:textSize="21sp"
                 android:textColor="@color/black"/>
@@ -134,6 +137,7 @@
                 android:paddingRight="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/tvWatching"
+                android:id="@+id/textFollowing"
                 android:textStyle="bold"
                 android:text="237"
                 android:textColor="@color/black"
