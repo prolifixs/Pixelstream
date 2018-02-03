@@ -77,9 +77,7 @@ public class RegisterMainActivity extends AppCompatActivity {
         initWidgets();
         setupFirebaseAuth();
         init();
-
     }
-
 
     //Checking inputs and making sure all fields are filled before registration can be successful.--------
     private boolean checkInputs(String email, String username, String password){
@@ -106,7 +104,6 @@ public class RegisterMainActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(RegisterMainActivity.this.getCurrentFocus()
                             .getApplicationWindowToken(), 0);
 
-
                 email = mEmail.getText().toString();
                 username = mUsername.getText().toString();
                 password = mPassword.getText().toString();
@@ -114,16 +111,11 @@ public class RegisterMainActivity extends AppCompatActivity {
                 if (checkInputs(email, username, password)){
                     mProgressBar.setVisibility(View.VISIBLE);
                     mPleaseWait.setVisibility(View.VISIBLE);
-
                     //Part of this code is in 'FirebaseMethods.java'
                     firebaseMethods.registerNewEmail(email, password, username);
-
-
-
                 }
             }
         });
-
         /*
     * To go back to login screen.
     * */
@@ -135,8 +127,6 @@ public class RegisterMainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     /*
     * Initializing Activity widgets
@@ -156,8 +146,6 @@ public class RegisterMainActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
         mPleaseWait.setVisibility(View.GONE);
     }
-
-
 
     //Simple method for checking empty strings -- method is used in 'init'
     private boolean isStringNull(String string){
@@ -223,8 +211,8 @@ public class RegisterMainActivity extends AppCompatActivity {
         //FireStore
         mFirestore = FirebaseFirestore.getInstance();
 
-
-        final CollectionReference docRef = mFirestore.collection("users");
+        //--Reference to all_users node--
+        final CollectionReference docRef = mFirestore.collection("all_users");
 
         docRef.whereEqualTo("username", username).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -250,7 +238,7 @@ public class RegisterMainActivity extends AppCompatActivity {
                 String mUsername = "";
                 mUsername = username + append;
 
-                //add new user to the database---------------------------------------************FIREBASE_TO_FIRESTORE
+                //add new user to the database--------------------------------------
                 //find the Main Code in 'firebasemethods.java'
                 firebaseMethods.addNewUser(email, mUsername, "", "", "");
 
@@ -259,8 +247,8 @@ public class RegisterMainActivity extends AppCompatActivity {
 
             }
         });
-
     }
+
 
     @Override
     protected void onStart() {

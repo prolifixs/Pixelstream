@@ -18,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,8 +38,8 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.prolifixs.pixelstream.Profile.MainProfile.ProfileAccountSettings.AccountSettingsActivity;
 import com.prolifixs.pixelstream.Profile.MainProfile.ProfileActivity;
 import com.prolifixs.pixelstream.R;
-import com.prolifixs.pixelstream.User.model.User;
-import com.prolifixs.pixelstream.User.model.UserAccountSettings;
+
+import com.prolifixs.pixelstream.User.model.Users;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
 import com.prolifixs.pixelstream.Utils.UniversalImageLoader;
@@ -118,10 +120,9 @@ public class ProfileFragment extends Fragment {
     //setting Profile Widgets
     private void setProfileWidgets(){
 
-        //method 2 *****All methods are written inside here*******
-        Accountsettings(new MyCallBack() {
+        Users(new MyCallBack() {
             @Override
-            public void onCallback(UserAccountSettings settings) {
+            public void onCallBack(Users settings) {
                 Log.d(TAG, "Retrieving user information from firestore");
 
                 mDisplayname.setText(settings.getDisplay_name());
@@ -135,12 +136,6 @@ public class ProfileFragment extends Fragment {
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-        //******Checking if description and website fields are empty********
-        if (mDescription == null || mWebsite == null){
-
-            mlinearLayout.setVisibility(View.GONE);
-
-        }
     }
 
     //****Setting up toolbar
@@ -170,7 +165,38 @@ public class ProfileFragment extends Fragment {
 
 
 
-    //-----------------------------------------------F I R E   B A S E--------------------------------------------------
+
+
+    //-----------------------------------------------F I R E   S T O R E--------------------------------------------------
+
+    //-----------------Retrieving all_users node from firestore
+    private void Users(final MyCallBack myCallBack){
+        Log.d(TAG, "settings: Retrieving user account settings from firestore");
+        final DocumentReference mSettings = mFirebaseFirestore.collection("all_users").document(userID);
+        mFirebaseFirestore = FirebaseFirestore.getInstance();
+
+        mSettings.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                    Users settings = documentSnapshot.toObject(Users.class);
+                    myCallBack.onCallBack(settings);
+
+            }
+        });
+
+    }
+    public interface MyCallBack{
+        void onCallBack(Users settings);
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    //-----------------------------------------------F I R E   B A S E------------------------------------------------------------
 
 
 
@@ -182,8 +208,7 @@ public class ProfileFragment extends Fragment {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 mFirebaseFirestore = FirebaseFirestore.getInstance();
-                myUserRef = mFirebaseFirestore.collection("users");
-                myUserSettingsRef = mFirebaseFirestore.collection("user_account_settings");
+                myUserSettingsRef = mFirebaseFirestore.collection("all_users");
 
 
 
@@ -206,34 +231,6 @@ public class ProfileFragment extends Fragment {
         };
     }
 
-    //-----------------------------------------------F I R E   S T O R E--------------------------------------------------
-
-    //*********************Retrieving user_account_settings node from fireStore.
-    private void Accountsettings(final MyCallBack myCallBack){
-        Log.d(TAG, "settings: Retrieving user account settings from firestore");
-        final CollectionReference mSettings = mFirebaseFirestore.collection("user_account_settings");
-
-        mSettings.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot documentSnapshots) {
-
-                for (DocumentSnapshot doc: documentSnapshots){
-
-                    UserAccountSettings settings = doc.toObject(UserAccountSettings.class);
-                    myCallBack.onCallback(settings);
-
-                }
-
-            }
-        });
-
-    }
-
-    public interface MyCallBack{
-        void onCallback(UserAccountSettings settings);
-    }
-
-
 
     @Override
     public void onStart() {
@@ -249,6 +246,7 @@ public class ProfileFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
+    //--------------------------------------------------------------------------------------------------------------------------------
 }
 
 

@@ -22,7 +22,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="JOHN DOE"
             android:id="@+id/display_name"
             android:textSize="16sp"/>
 
@@ -72,10 +71,10 @@
                 android:id="@+id/tvPosts"
                 android:textSize="16sp"/>
 
+            <!--    posts value  -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="137"
                 android:paddingLeft="10dp"
                 android:textStyle="bold"
                 android:layout_below="@+id/tvPosts"
@@ -101,10 +100,10 @@
                 android:layout_centerHorizontal="true"
                 android:textSize="16sp"/>
 
+            <!--    watchers value  -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1068"
                 android:textStyle="bold"
                 android:layout_below="@+id/tvWatchers"
                 android:id="@+id/textFollowers"
@@ -131,6 +130,7 @@
                 android:text="watching"
                 android:textSize="16sp" />
 
+            <!--    watching value  -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -139,7 +139,6 @@
                 android:layout_below="@+id/tvWatching"
                 android:id="@+id/textFollowing"
                 android:textStyle="bold"
-                android:text="237"
                 android:textColor="@color/black"
                 android:textSize="21sp" />
 

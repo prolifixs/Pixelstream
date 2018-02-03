@@ -15,9 +15,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.User.Utils.StringManipulation;
-import com.prolifixs.pixelstream.User.model.User;
+import com.prolifixs.pixelstream.User.model.Users;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +65,47 @@ public class FirebaseMethods {
     }
 
 
+    /*
+    * Updating new username (got a null pointer when referenced to EditProfileFragment(checkIfUsernameExists method))
+    * method is directly used inside fragment class instead. this method is suspended for now till issue is resolved.
+    * */
+
+    public void updateUsername(final String username) {
+        Log.d(TAG, "updateUsername: Updating username to:" + username);
+        
+        mFirestore.collection("all_users").document(userID).update("username", username).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "onSuccess: Username successfully updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: error updating username");
+            }
+        });
+
+    }
+
+ 
+
+    /*
+    * Updating email address for existing user
+    * @param updateEmail
+    * */
+    public void updateEmail(String email){
+        mFirestore.collection("all_users").document(userID).update("email", email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "onSuccess: Email successfully updated");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: could not update email");
+            }
+        });
+    }
 
 
     //Registering new email and password to fireBase Authentication.------------------------------------------
@@ -110,7 +155,7 @@ public class FirebaseMethods {
                             if (task.isSuccessful()){
 
                             }else{
-                                Toast.makeText(mContext, "couldn't send verification email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "could not send verification email.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -125,60 +170,37 @@ public class FirebaseMethods {
     * */
     public void addNewUser(String email, String username, String description, String website, String profile_photo){
         //create a user
-        User user = new User( userID, 1, email, StringManipulation.condenseUsername(username));
+        //Users user = new Users( userID, 1, email, StringManipulation.condenseUsername(username));
 
 
 
         //------------------------------------  fireStore version *****-----------------------------------------------------------
 
+        //----------------------all users (updated version)-----------------------------------------
+        Map<String, Object> usersMap = new HashMap<>();
+        usersMap.put("description", description);
+        usersMap.put("display_name", username);
+        usersMap.put("followers", 0);
+        usersMap.put("following", 0);
+        usersMap.put("posts", 0);
+        usersMap.put("profile_photo", profile_photo);
+        usersMap.put("username", StringManipulation.condenseUsername(username));
+        usersMap.put("website", website);
+        usersMap.put("user_id", userID);
+        usersMap.put("phone_number", 1);
+        usersMap.put("email", email);
 
-        //user-------------------------------------------
-
-        Map<String, String> userMap = new HashMap<>();
-        userMap.put("user_id", userID);
-        userMap.put("phone_number", "1");
-        userMap.put("email", email);
-        userMap.put("username", StringManipulation.condenseUsername(username));
-
-        mFirestore.collection("users").document(userID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mFirestore.collection("all_users").document(userID).set(usersMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: successfully added file to firestore");
+                Log.d(TAG, "onSuccess: Sucessfully created users");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                String error = e.getMessage();
-                Log.d(TAG, "onFailure: error adding file to firestore");
+                Log.d(TAG, "onFailure: Error uploading datas");
             }
         });
-
-        //User_account_settings------------------------------
-
-        Map<String, String> userSettings = new HashMap<>();
-        userSettings.put("description", description);
-        userSettings.put("display_name", username);
-        userSettings.put("followers", "0");
-        userSettings.put("following", "0");
-        userSettings.put("posts", "0");
-        userSettings.put("profile_photo", profile_photo);
-        userSettings.put("username", username);
-        userSettings.put("website", website);
-
-        mFirestore.collection("user_account_settings").document(userID).set(userSettings).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: successfully added to firestore");
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                String error = e.getMessage();
-                Log.d(TAG, "onFailure: Error adding file to firestore");
-            }
-        });
-
 
     }
 
