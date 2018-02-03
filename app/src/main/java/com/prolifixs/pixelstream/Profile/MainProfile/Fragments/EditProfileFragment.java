@@ -221,26 +221,40 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         final String website = mWebsite.getText().toString();
         final String description = mDescription.getText().toString();
         final String email = mEmali.getText().toString();
-        final long phoneNumber  = Long.parseLong(mPhoneNumber.getText().toString());
+        final long phoneNumber  = Long.parseLong(mPhoneNumber.getText().toString());//////////Phone number not set yet!!!
 
         //(1)Case 1: When the user has made a change to their username
         if (!mUsers.getUsername().equals(username)){
             checkingIfusernameExist(username);//not working properly
 
         }
-        //(2)Case 1: When the user has made change to their email
+        //(2)Case 2: When the user has made change to their email
         if (!mUsers.getEmail().equals(email)){
 
             //1. Re-authenticate
-                //1.1 Confirm password and email
+                //2.1 Confirm password and email
             ConfirmPasswordDialog dialog = new ConfirmPasswordDialog();
             dialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
             dialog.setTargetFragment(EditProfileFragment.this, 1);
+        }
+        //(3)Case 3: When the user has made changes to their display_name.
+        if (!mUsers.getDisplay_name().equals(displayName)){
+            //update display_name.
+            mFirebaseMethods.updateUserInfo(displayName, null, null);
+            Toast.makeText(getActivity(), "saved", Toast.LENGTH_SHORT).show();
 
-            //2. Check if the email is already registered
-            //3. changing the user email
-
-
+        }
+        //(4)Case 4: when the user has made changes to their description
+        if (!mUsers.getDescription().equals(description)){
+            //Update description
+            mFirebaseMethods.updateUserInfo(null, description, null);
+            Toast.makeText(getActivity(), "saved", Toast.LENGTH_SHORT).show();
+        }
+        //(5)Case 5: When the user has made changes to their website
+        if (!mUsers.getWebsite().equals(website)){
+            //Update website
+            mFirebaseMethods.updateUserInfo(null, null, website);
+            Toast.makeText(getActivity(), "saved", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -72,19 +72,66 @@ public class FirebaseMethods {
 
     public void updateUsername(final String username) {
         Log.d(TAG, "updateUsername: Updating username to:" + username);
-        
-        mFirestore.collection("all_users").document(userID).update("username", username).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: Username successfully updated");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: error updating username");
-            }
-        });
 
+        if (username != null){
+            mFirestore.collection("all_users").document(userID).update("username", username).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "onSuccess: Username successfully updated");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: error updating username");
+                }
+            });
+        }
+    }
+
+    /*
+    * Updating description, website and display_name(using single method to handle all updates)
+    * */
+    public void updateUserInfo(String display_name, String description, String website){
+        Log.d(TAG, "updateUserInfo: updating user information accordingly");
+        if (display_name != null){
+            mFirestore.collection("all_users").document(userID).update("display_name", display_name).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "onSuccess: display_name successfully updated");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: error updating display_name");
+                }
+            });
+        }
+        if (description != null){
+            mFirestore.collection("all_users").document(userID).update("description", description).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "onSuccess: description successfully updated");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: error updating description");
+                }
+            });
+        }
+        if (website != null){
+            mFirestore.collection("all_users").document(userID).update("website", website).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "onSuccess: website successfully updated");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: error updating website");
+                }
+            });
+        }
     }
 
  
