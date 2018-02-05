@@ -82,7 +82,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                                  if (task.isSuccessful()){
                                      try {
 
-
                                      if (task.getResult().getProviders().size() == 1){
                                          Log.d(TAG, "onComplete: that email is already in use");
                                          Toast.makeText(getActivity(), "That email is already in use", Toast.LENGTH_SHORT).show();
@@ -183,10 +182,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                 saveProfileSettings();
             }
         });
-        
-
         return view;
-
     }
 
     private void setProfileWidgets(){

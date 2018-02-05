@@ -14,6 +14,8 @@ import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.prolifixs.pixelstream.R;
+import com.prolifixs.pixelstream.Upload.MainUpload.Fragments.GalleryFragment;
+import com.prolifixs.pixelstream.Upload.MainUpload.Fragments.VideoFragment;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
 import com.prolifixs.pixelstream.Utils.Permissions;
 import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
@@ -41,6 +43,7 @@ import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
         Log.d(TAG, "onCreate: Starting activity");
 
         if(checkPermissionsArray(Permissions.PERMISSIONS)){
+            setupViewPager();
 
         }else{
             verifyPermissions(Permissions.PERMISSIONS);
@@ -49,17 +52,29 @@ import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
         //setupBottomNavigationView();
     }
 
+    /*
+    * Returns the current tab number
+    * 0 = Gallery-fragment
+    * 1 = Video-fragment
+    * */
+    public int getCurrentTabNumber(){
+        return mViewPager.getCurrentItem();
+    }
+
+    /*
+    * Setting up viewPager for managing tabs
+    * */
     private void setupViewPager(){
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        //adapter.addFragment(new GalleryFragment);
-        //adapter.addFragment(new VideoFragment);
-        //mViewPager = (ViewPager)findViewById(R.id.container);
-       // mViewPager.setAdapter(adapter);
+        adapter.addFragment(new GalleryFragment());
+        adapter.addFragment(new VideoFragment());
+        mViewPager = (ViewPager)findViewById(R.id.container);
+        mViewPager.setAdapter(adapter);
 
-        //TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsBottom);
-        //tabLayout.setupWithViewPager(mViewPager);
-        //tabLayout.getTabAt(0).setText(getString(R.string.gallery));
-        //tabLayout.getTabAt(1).setText(getString(R.string.video));
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabsBottom);
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.getTabAt(0).setText(getString(R.string.gallery));
+        tabLayout.getTabAt(1).setText(getString(R.string.video));
     }
     /*
     * Permissions verification ---------------------------------------
