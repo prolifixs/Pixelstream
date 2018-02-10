@@ -41,8 +41,13 @@ import com.prolifixs.pixelstream.R;
 
 import com.prolifixs.pixelstream.User.model.Users;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
+import com.prolifixs.pixelstream.Utils.DateTimeSystem;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
 import com.prolifixs.pixelstream.Utils.UniversalImageLoader;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,7 +71,6 @@ public class ProfileFragment extends Fragment {
 
     //FireStore
     private FirebaseFirestore mFirebaseFirestore;
-    private CollectionReference myUserRef;
     private CollectionReference myUserSettingsRef;
     private String userID;
 
@@ -74,6 +78,7 @@ public class ProfileFragment extends Fragment {
 
     //Widgets
     private TextView mPosts, mFollowers, mFollowing, mDisplayname, mUsername, mWebsite, mDescription;
+    private TextView mHour;
     private ProgressBar mProgressBar;
     private CircleImageView mProfilePhoto;
     private GridView mGridView;
@@ -83,6 +88,8 @@ public class ProfileFragment extends Fragment {
     private LinearLayout mlinearLayout;
 
     private Context mContext;
+
+    private long timeStamp = 0;
 
 
     @Nullable
@@ -105,6 +112,7 @@ public class ProfileFragment extends Fragment {
         mlinearLayout = (LinearLayout) view.findViewById(R.id.linLayout2);
         mFirebaseMethods = new FirebaseMethods(getActivity());
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mHour = (TextView) view.findViewById(R.id.gridViewHours);
         mContext = getActivity();
         Log.d(TAG, "onCreateView: Starting fragment activity");
 
@@ -114,8 +122,24 @@ public class ProfileFragment extends Fragment {
         setupFirebaseAuth();
 
 
+        //getting user current hours
+        checkIfTimePassed();
+
+
+
         return view;
     }
+    //Temporarily placed for testing...............
+    private void checkIfTimePassed(){
+        DateTimeSystem dis = new DateTimeSystem();
+        String getHours = dis.getTwentyFourHours();
+        if (getHours.equals("23:59:59")){
+            Toast.makeText(mContext, "Time past 1 day", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "checkIfTimePassed: time passed 1 day");
+        }
+        mHour.setText(dis.getTwentyFourHours());
+    }
+
 
     //setting Profile Widgets
     private void setProfileWidgets(){

@@ -10,6 +10,8 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -32,6 +34,7 @@
         <activity android:name=".User.Register.RegisterMainActivity"></activity>
         <activity android:name=".User.Login.LostPassword.LostPassword"></activity>
         <activity android:name=".User.Login.Fragment.PasswordChangedSuccess"></activity>
+        <activity android:name=".Upload.MainUpload.NextActivities.NextActivity"></activity>
 
     </application>
 

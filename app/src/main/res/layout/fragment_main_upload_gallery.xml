@@ -10,6 +10,7 @@
         android:id="@+id/relLayout1">
 
         <!-- Gallery Toolbar -->
+        <include layout="@layout/snippet_top_upload_gallerytoolbar"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -24,24 +25,48 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="25"
-            android:id="@+id/relLayoutGalleryCamera">
+            android:id="@+id/relLayoutGalleryCamera"
+            android:background="@color/colorWhite">
 
+            <!-- Holding the camera preview and button-->
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/galleryCameraView"/>
 
+            <!-- Preview selected image -->
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_home_fragment_camera"
-                android:layout_centerInParent="true"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"
+                android:scaleType="centerCrop"
+                android:id="@+id/galleryImageView"/>
 
             <ProgressBar
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/progressBar"
-                android:layout_centerInParent="true"/>
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="33dp"
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap to open camera"
+                android:paddingRight="17dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginRight="10dp"
+                android:layout_toStartOf="@+id/galleryImageView"
+                android:background="@drawable/button_round_edge"
+                />
+
+
 
         </RelativeLayout>
 

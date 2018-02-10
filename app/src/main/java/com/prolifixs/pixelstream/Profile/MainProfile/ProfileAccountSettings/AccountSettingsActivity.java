@@ -2,6 +2,7 @@ package com.prolifixs.pixelstream.Profile.MainProfile.ProfileAccountSettings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -23,6 +24,7 @@ import com.prolifixs.pixelstream.Profile.MainProfile.Fragments.SignOutFragment;
 import com.prolifixs.pixelstream.Profile.MainProfile.ProfileActivity;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
+import com.prolifixs.pixelstream.Utils.FirebaseStorageMethods;
 import com.prolifixs.pixelstream.Utils.SectionStatePagerAdapter;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private static final int ACTIVITY_NUM = 4;
     private Context mContext;
 
-    private SectionStatePagerAdapter pagerAdapter;
+    public SectionStatePagerAdapter pagerAdapter;
     private ViewPager mViewPager;
     private RelativeLayout mRelativeLayout;
 
@@ -50,11 +52,40 @@ public class AccountSettingsActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mRelativeLayout = (RelativeLayout) findViewById(R.id.relLayout1);
 
+        getIncomingIntent();
         setupSettingsLists();
         setupFragments();
         setupToolbar();
         setupBottomNavigationView();
 
+
+
+    }
+
+    private void getIncomingIntent(){
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(getString(R.string.selected_image)) || intent.hasExtra(getString(R.string.selected_bitmap))){
+
+        //if there is an imageUrl attached as an extra, then it was chosen from the gallery/photo fragment
+            Log.d(TAG, "getIncomingIntent: New incoming imgUrl");
+            if(intent.getStringExtra(getString(R.string.return_to_fragment)).equals(getString(R.string.edit_profile_fragment))){
+                //set the new profile picture(camera or gallery).
+                if (intent.hasExtra(getString(R.string.selected_image))){//case for gallery
+
+                    FirebaseStorageMethods firebaseMethods = new FirebaseStorageMethods(AccountSettingsActivity.this);
+                    firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo), null, 0,
+                            intent.getStringExtra(getString(R.string.selected_image)), null);
+                }
+
+                else if (intent.hasExtra(getString(R.string.selected_bitmap))){//case for camera
+                    FirebaseStorageMethods firebaseMethods = new FirebaseStorageMethods(AccountSettingsActivity.this);
+                    firebaseMethods.uploadNewPhoto(getString(R.string.profile_photo), null, 0,
+                            null, (Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap)));
+                }
+            }
+
+        }
 
     }
 
@@ -70,7 +101,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         pagerAdapter.addFragmentToList(new SignOutFragment(), getString(R.string.sign_out_fragment));
     }
 
-    private void setupViewPager(int fragmentNumber){
+    public void setupViewPager(int fragmentNumber){
         mRelativeLayout.setVisibility(View.GONE);//Goes away and makes only selected fragment to show up
         Log.d(TAG, "setupViewPager: navigating to fragment number:" + fragmentNumber);
         mViewPager.setAdapter(pagerAdapter);

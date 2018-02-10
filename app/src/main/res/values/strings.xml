@@ -3,6 +3,7 @@
 
     <!-- Navigation -->
     <string name="home_navigation">home_navigation</string>
+    <string name="selected_image">selected_image</string>
 
     <!-- Fragment names  -->
     <string name="edit_profile_fragment">Edit Profile</string>
@@ -15,15 +16,25 @@
     <!-- dialogs  -->
     <string name="confirm_password_dialog">ConfirmPasswordDialog</string>
 
+    <!-- intent extras  -->
+    <string name="return_to_fragment">return_to_fragment</string>
+    <string name="selected_bitmap">selected_bitmap</string>
+
+
     <!-- Firebase database fields  -->
     <string name="dbname_all_users">all_users</string>
     <string name="fields_username">username</string>
 
+    <!-- Firebase storage fields  -->
+    <string name="new_photo">new photo</string>
+    <string name="profile_photo">profile photo</string>
+    <string name="cover_photo">cover photo</string>
+
 
     <string name="dbname_users">users</string>
     <string name="dbname_user_account_settings">user_account_settings</string>
-
-
+    <string name="strings_next">Next</string>
+    <string name="string_upload">Upload</string>
 
 
 </resources>

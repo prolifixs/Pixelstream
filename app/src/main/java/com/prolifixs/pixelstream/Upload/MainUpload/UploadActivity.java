@@ -1,6 +1,7 @@
 package com.prolifixs.pixelstream.Upload.MainUpload;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -76,6 +77,14 @@ import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
         tabLayout.getTabAt(0).setText(getString(R.string.gallery));
         tabLayout.getTabAt(1).setText(getString(R.string.video));
     }
+
+    /*
+    *
+    * */
+    public int getTask(){
+        //Log.d(TAG, "getTask: " + getIntent().getFlags());
+        return getIntent().getFlags();
+    }
     /*
     * Permissions verification ---------------------------------------
     * */
@@ -117,6 +126,7 @@ import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
         }
         else{
             Log.d(TAG, "checkPermissions: \n Permission was granted for: " + permission);
+
             return true;
         }
     }

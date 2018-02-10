@@ -40,6 +40,7 @@ import com.prolifixs.pixelstream.Profile.MainProfile.ProfileAccountSettings.Acco
 import com.prolifixs.pixelstream.Profile.MainProfile.ProfileActivity;
 import com.prolifixs.pixelstream.Profile.MainProfile.dialogs.ConfirmPasswordDialog;
 import com.prolifixs.pixelstream.R;
+import com.prolifixs.pixelstream.Upload.MainUpload.UploadActivity;
 import com.prolifixs.pixelstream.User.model.Users;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
 import com.prolifixs.pixelstream.Utils.UniversalImageLoader;
@@ -162,7 +163,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         setupFirebaseAuth();
 
 
-
         //Back arrow for navigating back to profile activity
         ImageView backArrow = (ImageView) view.findViewById(R.id.backArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +201,20 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                 mPhoneNumber.setText(String.valueOf(settings.getPhone_number()));
                 mEmali.setText(String.valueOf(settings.getEmail()));
                 mProgressBar.setVisibility(View.GONE);
+
+            }
+        });
+
+        //Changing  profile photo.....
+        mChangePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: Changing profile photo");
+                //in the future, make a dialog so the user can remove photo without changing
+                Intent intent = new Intent(getActivity(), UploadActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//will give it a number of 268435456(a root task)
+                getActivity().startActivity(intent);
+                getActivity().finish();
 
             }
         });
