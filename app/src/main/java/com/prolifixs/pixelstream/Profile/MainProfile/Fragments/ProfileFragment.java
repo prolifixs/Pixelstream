@@ -21,13 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -39,13 +42,16 @@ import com.prolifixs.pixelstream.Profile.MainProfile.ProfileAccountSettings.Acco
 import com.prolifixs.pixelstream.Profile.MainProfile.ProfileActivity;
 import com.prolifixs.pixelstream.R;
 
+import com.prolifixs.pixelstream.User.model.Photo;
 import com.prolifixs.pixelstream.User.model.Users;
 import com.prolifixs.pixelstream.Utils.BottomNavigationViewHelper;
 import com.prolifixs.pixelstream.Utils.DateTimeSystem;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
+import com.prolifixs.pixelstream.Utils.GridImageAdapter;
 import com.prolifixs.pixelstream.Utils.UniversalImageLoader;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -71,6 +77,8 @@ public class ProfileFragment extends Fragment {
 
     //FireStore
     private FirebaseFirestore mFirebaseFirestore;
+    //FireStore
+    private FirebaseFirestore mFirestore;
     private CollectionReference myUserSettingsRef;
     private String userID;
 
@@ -112,6 +120,7 @@ public class ProfileFragment extends Fragment {
         mlinearLayout = (LinearLayout) view.findViewById(R.id.linLayout2);
         mFirebaseMethods = new FirebaseMethods(getActivity());
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mFirestore = FirebaseFirestore.getInstance();
         mHour = (TextView) view.findViewById(R.id.gridViewHours);
         mContext = getActivity();
         Log.d(TAG, "onCreateView: Starting fragment activity");
@@ -120,6 +129,7 @@ public class ProfileFragment extends Fragment {
         setupBottomNavigationView();
         setupToolbar();
         setupFirebaseAuth();
+        setupGridViewToday();
 
 
         //getting user current hours
@@ -138,6 +148,49 @@ public class ProfileFragment extends Fragment {
             Log.d(TAG, "checkIfTimePassed: time passed 1 day");
         }
         mHour.setText(dis.getTwentyFourHours());
+    }
+
+    /*
+    * Gets all posts made by user during 24h-hours and displays on grid
+    * */
+    private void setupGridViewToday(){
+        Log.d(TAG, "setupGridView: Setting up today image Grid");
+
+        final ArrayList<Photo> photos = new ArrayList<>();
+        CollectionReference docRef = mFirestore.collection("today_posts");
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.d(TAG, "onSuccess: getting posts uploaded by user today...");
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot ds: task.getResult()){
+                        Log.d(TAG, "onComplete: getting all documents" + task.getResult());
+                        photos.add(ds.toObject(Photo.class));
+
+
+                        //Setting up image Grid
+                        int gridWidth = getResources().getDisplayMetrics().widthPixels;
+                        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+                        mGridView.setColumnWidth(imageWidth);
+
+                        //Image url list to set the images to the grid
+                        ArrayList<String> imgUrls = new ArrayList<>();
+                        for (int i = 0; i < photos.size(); i++){
+                            imgUrls.add(photos.get(i).getImage_path());
+                        }
+                        GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview,
+                                "", imgUrls);
+                        //attach adapter to grid
+                        mGridView.setAdapter(adapter);
+
+                    }
+                }else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
     }
 
 
@@ -181,7 +234,7 @@ public class ProfileFragment extends Fragment {
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
