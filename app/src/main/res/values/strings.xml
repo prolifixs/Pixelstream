@@ -35,6 +35,7 @@
     <string name="dbname_user_account_settings">user_account_settings</string>
     <string name="strings_next">Next</string>
     <string name="string_upload">Upload</string>
+    <string name="text_currently_in">currently in</string>
 
 
 </resources>

@@ -217,14 +217,13 @@ public class FirebaseMethods {
     * */
     public void addNewUser(String email, String username, String description, String website, String profile_photo){
         //create a user
-        //Users user = new Users( userID, 1, email, StringManipulation.condenseUsername(username));
-
 
 
         //------------------------------------  fireStore version *****-----------------------------------------------------------
 
         //----------------------all users (updated version)-----------------------------------------
         Map<String, Object> usersMap = new HashMap<>();
+        usersMap.put("current_location", "");//Get actual device location from google location...
         usersMap.put("description", description);
         usersMap.put("display_name", username);
         usersMap.put("followers", 0);

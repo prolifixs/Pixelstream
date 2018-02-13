@@ -11,13 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -25,8 +24,6 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.ProviderQueryResult;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,17 +32,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.prolifixs.pixelstream.Profile.MainProfile.ProfileAccountSettings.AccountSettingsActivity;
-import com.prolifixs.pixelstream.Profile.MainProfile.ProfileActivity;
 import com.prolifixs.pixelstream.Profile.MainProfile.dialogs.ConfirmPasswordDialog;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Upload.MainUpload.UploadActivity;
 import com.prolifixs.pixelstream.User.model.Users;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
 import com.prolifixs.pixelstream.Utils.UniversalImageLoader;
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -130,7 +122,8 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private String userID;
 
     //EditProfileFragment Widgets
-    private EditText mDisplayName, mUsername, mWebsite, mDescription, mEmali, mPhoneNumber;
+    private TextView mCurrentLocation;
+    private EditText  mDisplayName, mUsername, mWebsite, mDescription, mEmali, mPhoneNumber;
     private ImageView mChangePhoto;
     private ImageView mSaveChanges;
     private CircleImageView mProfilePhoto;
@@ -138,6 +131,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private Context mContext;
     private FirebaseMethods mFirebaseMethods;
 
+    //Constructors
     private Users mUsers;
 
 
@@ -146,6 +140,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_editprofile, container, false);
 
+        mCurrentLocation = (TextView) view.findViewById(R.id.currentLocation);
         mDisplayName = (EditText)view.findViewById(R.id.full_name);
         mUsername = (EditText)view.findViewById(R.id.username);
         mWebsite = (EditText)view.findViewById(R.id.website);
@@ -193,6 +188,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                 Log.d(TAG, "Retriving data from firstore");
                 mUsers = settings;
 
+                mCurrentLocation.setText(settings.getCurrent_location());
                 mDisplayName.setText(settings.getDisplay_name());
                 mUsername.setText(settings.getUsername());
                 mWebsite.setText(settings.getWebsite());
@@ -383,8 +379,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             }
         });
     }
-
-
 
     public interface MyCallBack{
         void onCallBack(Users settings);

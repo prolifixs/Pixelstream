@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="135dp"
+    android:background="@color/colorWhite">
+
+    <!--*********Custom navigation bar**********-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileTopBar">
+        <include layout="@layout/snippet_top_profilebar"/>
+
+    </RelativeLayout>
+
+    <!--*****Choose options****-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relLayout1"
+        android:layout_below="@+id/profileTopBar"
+        android:layout_marginTop="10dp">
+        <include layout="@layout/snippet_top_profile_banner_options"/>
+
+    </RelativeLayout>
+
+    <!--******************************CoverPage Viewer*********************************-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:id="@+id/coverView"
+        android:visibility="invisible">
+    </RelativeLayout>
+
+
+    <!--******************************Stories Viewer**********************************-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:id="@+id/storiesView"
+        android:visibility="invisible">
+
+    </RelativeLayout>
+
+    <!--********************************blog Viewer*********************************-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:id="@+id/blogView"
+        android:visibility="invisible">
+
+    </RelativeLayout>
+
+</RelativeLayout>

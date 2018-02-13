@@ -89,6 +89,7 @@ public class NextActivity extends AppCompatActivity{
             }
         });
 
+        //-------------------------------------F I R E S T O R E   U P L O A D---------------------------------------------------------
         mShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +106,7 @@ public class NextActivity extends AppCompatActivity{
                     mFirebaseStorageMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
 
                 }
-
+                //-------------------------------------F I R E S T O R E   U P L O A D--------------------------------------------
 
 
                 //Uploading the image to firebase...

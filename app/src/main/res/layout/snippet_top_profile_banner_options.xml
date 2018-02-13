@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+                                <!--******************Cover_page, stories, blog**************-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linLayout3"
+        android:layout_below="@+id/linLayout2"
+        android:weightSum="3">
+
+        <!--*************** cover options *********************  -->
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout1"
+            android:layout_weight="1">
+
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/cover"
+                android:background="@drawable/ba_profile_cover"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wall frame"
+                android:layout_below="@+id/cover"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="10dp"
+                android:id="@+id/txtCover"
+                android:textStyle="normal"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
+        <!--*************** stories options *********************  -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout2"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/stories"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ba_profile_story" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Story stream"
+                android:paddingLeft="10dp"
+                android:layout_below="@+id/stories"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/txtStories"
+                android:textStyle="normal"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
+        <!--*************** Source options *********************  -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout3"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/blog"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="17dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/ba_profile_blog"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Source"
+                android:paddingLeft="5dp"
+                android:layout_below="@+id/blog"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="7dp"
+                android:textStyle="normal"
+                android:id="@+id/txtBlog"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</merge>
+

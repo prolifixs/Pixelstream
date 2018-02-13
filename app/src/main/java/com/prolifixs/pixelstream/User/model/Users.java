@@ -5,6 +5,7 @@ package com.prolifixs.pixelstream.User.model;
  */
 //------------------------------------------------------updated user account version-------------------------------
 public class Users {
+    private String current_location;
     private String description;
     private String display_name;
     private long followers;
@@ -17,8 +18,14 @@ public class Users {
     private String email;
     private String username;
 
-    public Users(String description, String display_name, long followers, long following, long posts,
+
+    public Users(){//Empty by default for firebase
+
+    }
+
+    public Users(String current_location, String description, String display_name, long followers, long following, long posts,
                  String profile_photo, String website, String user_id, long phone_number, String email, String username) {
+        this.current_location = current_location;
         this.description = description;
         this.display_name = display_name;
         this.followers = followers;
@@ -32,8 +39,12 @@ public class Users {
         this.username = username;
     }
 
-    public Users(){
+    public String getCurrent_location() {
+        return current_location;
+    }
 
+    public void setCurrent_location(String current_location) {
+        this.current_location = current_location;
     }
 
     public String getDescription() {
@@ -127,7 +138,8 @@ public class Users {
     @Override
     public String toString() {
         return "Users{" +
-                "description='" + description + '\'' +
+                "current_location='" + current_location + '\'' +
+                ", description='" + description + '\'' +
                 ", display_name='" + display_name + '\'' +
                 ", followers=" + followers +
                 ", following=" + following +
