@@ -126,7 +126,6 @@ import com.prolifixs.pixelstream.Utils.SectionsPagerAdapter;
         }
         else{
             Log.d(TAG, "checkPermissions: \n Permission was granted for: " + permission);
-
             return true;
         }
     }

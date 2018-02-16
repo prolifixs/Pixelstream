@@ -82,6 +82,8 @@ public class FirebaseStorageMethods {
     /*
     * Get image count ---(Test version - incomplete).....
     * */
+    //FIXME------Get count initially was for 'upLoadNewPhoto' method for counting images instead of append. either fix this issue of find new
+    //FIXME--way to count all number of photo with fireStore
     public Task<Integer> getCount(final DocumentReference ref) {
         // Sum the count of each shard in the subcollection
         return ref.collection("photos").get()
@@ -258,6 +260,7 @@ public class FirebaseStorageMethods {
         //CASE 3: Cover-Page photo---------(future work......)----------------------------------------
         else if (photoType.equals(mContext.getString(R.string.cover_photo))){
             Log.d(TAG, "uploadNewPhoto: Uploading a new cover photo");
+            //TODO----------using the same method for uploading profilePhoto, use it to display cover-photo
             /*
             * cover photo code goes here..(Just copy and replace from profile_photo)......
             *
@@ -269,6 +272,7 @@ public class FirebaseStorageMethods {
     /*
     * Adding new photo to database
     * */
+    //FIXME-------photo path is set to outside "all_users" node. when subcollection query is available, change upload path inside individual user_id
     private void addPhotoToDatabase(String caption, String date, String url, String tags, String user_id, String photo_id){
         Log.d(TAG, "addPhotoToDatabase: Adding new photo to database...");
 
@@ -279,7 +283,7 @@ public class FirebaseStorageMethods {
         upload.put("tags", tags);
         upload.put("user_id", user_id);
         upload.put("photo_id", photo_id);
-        
+
         mFirestore.collection("all_photos").document(photo_id).set(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

@@ -1,6 +1,7 @@
 package com.prolifixs.pixelstream.User.Register;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.prolifixs.pixelstream.GoogleMaps.AllowDeviceLocation;
 import com.prolifixs.pixelstream.R;
 import com.prolifixs.pixelstream.Utils.FirebaseMethods;
 
@@ -173,7 +175,7 @@ public class RegisterMainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null){//------------------------------replace firebase to firestore here ****(UPDATE : DONE!)-----------------------------------------
+                if (user != null){
                     //User is Signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in" + user.getUid());
 
@@ -244,6 +246,11 @@ public class RegisterMainActivity extends AppCompatActivity {
 
                 Toast.makeText(mContext, "Signup successful, sending verification email", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();//until user verify email.
+
+
+                //Before any further advancement, request device location--------------------------------------------------
+                Intent intent = new Intent(mContext, AllowDeviceLocation.class);
+                startActivity(intent);
 
             }
         });

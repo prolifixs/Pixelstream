@@ -122,9 +122,7 @@
         android:text="Please wait..."
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:id="@+id/pleaseWait"
-        />
-
+        android:id="@+id/pleaseWait" />
 
 
 </RelativeLayout>

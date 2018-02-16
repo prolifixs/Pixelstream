@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Pixelstream</string>
 
+    <!--    Google maps api key    -->
+    <string name="google_maps_API_KEY">AIzaSyDxV5jC_jYSJkHoQbCAGC56ExRLzzWXnCs</string>
+
+
     <!-- Navigation -->
     <string name="home_navigation">home_navigation</string>
     <string name="selected_image">selected_image</string>
